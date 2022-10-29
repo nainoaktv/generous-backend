@@ -24,7 +24,7 @@ const apiKey = process.env.API_KEY;
  router.post('/nonprofits', (req, res) => {
     axios.get(`https://partners.every.org/v0.2/browse/${req.params.concern}?apiKey=${apiKey}`)
     .then(response => {
-        Nonprofit.insertMany({
+        Nonprofit.insert({
             name: req.body.name,
             profileUrl: req.body.profileUrl,
             description: req.body.description, 

@@ -20,39 +20,14 @@ db.on('error', (error) => {
 
 const Nonprofit = require('../models/nonprofit');
 
-router.post("/", async (req, res) => {
-    try {
-        const response = await axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
-        console.log(response.data)
-        res.json({data: response.data})
-        
-    } catch (error) {
-       console.log("ERROR", error) 
-    }
-})
+function nonProfits() {
+    axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
+        .then(response => {
+            Nonprofit.insertMany(response.data.nonprofits);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
 
-
-
-
-    // axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
-    //         .then(response => {
-    //             Nonprofit.insertMany(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         })
-
-
-module.exports = router
-
-
-
-// function nonProfits() {
-//     axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
-//         .then(response => {
-//             Nonprofit.insertMany(response.data);
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         })
-// }
+nonProfits();
