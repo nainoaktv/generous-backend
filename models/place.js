@@ -8,7 +8,6 @@ const placeSchema = new Schema({
     city: String,
     state: String,
     zipCode: String,
-    
 });
 
 const Place = mongoose.model('Place', placeSchema);

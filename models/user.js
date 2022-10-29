@@ -18,7 +18,11 @@ const userSchema = new Schema({
     date: {
         type: Date,
         default: Date.now()
-    }
+    },
+    places: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Place'
+    }]
 })
 
 const User = mongoose.model('User', userSchema);
