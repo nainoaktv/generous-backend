@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const apiKey = process.env.API_KEY;
+const axios = require('axios');
 require('./config/passport')(passport);
 
 // App Set up
@@ -31,7 +33,25 @@ db.on('error', (error) => {
 
 // API Routes
 app.get('/', (req, res) => {
-  res.json({ name: 'MERN Auth API', greeting: 'Welcome to the our API', author: 'YOU', message: "Smile, you are being watched by the Backend Engineering Team" });
+  axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
+  .then(response => {
+    console.log(response.data)
+    res.send(response.data)
+    const nonprofit = response.data;
+    db.nonprofit.create({
+      name: nonprofit.name,                 
+      profileUrl: nonprofit.profileUrl,           
+      description: nonprofit.description,          
+      ein: nonprofit.ein,                  
+      logoCloudinaryId: nonprofit.logoCloudinaryId,   
+      logoUrl: nonprofit.logoUrl,             
+      matchedTerms: nonprofit.matchedTerms 
+    })
+})
+.catch(error => {
+  console.log('error', error) 
+  res.json({ message: "Error ocurred, please try again" });
+})
 });
 
 app.use('/examples', require('./controllers/example'));

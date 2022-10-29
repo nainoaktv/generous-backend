@@ -16,6 +16,7 @@ db.on('error', (error) => {
 const Place = require('../models/place');
 const { randAddress } = require('@ngneat/falso');
 
+
 // test fake data
 let newPlace = randAddress();
 console.log('NEW PLACE', newPlace); // making sure it works w/ this line.
@@ -53,3 +54,5 @@ makePlaces()
 .catch(error => {
     console.log('ERROR', error);
 });
+
+

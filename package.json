@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@ngneat/falso": "^6.1.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -22,6 +22,7 @@
     "mongoose": "^5.11.18",
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "react-router-dom": "^6.4.2"
   }
 }
