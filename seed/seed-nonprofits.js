@@ -6,6 +6,8 @@ mongoose.connect(MONGO_CONNECTION_STRING, { useNewUrlParser: true });
 const db = mongoose.connection;
 const axios = require('axios')
 const apiKey = process.env.API_KEY;
+const express = require('express');
+const router = express.Router();
 
 
 db.once('open', () => {
@@ -19,23 +21,13 @@ db.on('error', (error) => {
 const Nonprofit = require('../models/nonprofit');
 
 function nonProfits() {
-    const array = [];
     axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
-    .then(response => {
-        array.push(response.data))
-        .then(array => {
-            Nonprofit.insertMany(array)
+        .then(response => {
+            Nonprofit.insertMany(response.data.nonprofits);
         })
-            .catch(error => {
-        console.log(error);
-    })
-})
-.catch(error => {
-    console.log('ERROR', error);
-});
+        .catch(error => {
+            console.log(error);
+        })
 }
 
 nonProfits();
-
-
-

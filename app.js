@@ -33,27 +33,10 @@ db.on('error', (error) => {
 
 // API Routes
 app.get('/', (req, res) => {
-  axios.get(`https://partners.every.org/v0.2/browse/climate?apiKey=${apiKey}`)
-  .then(response => {
-    console.log(response.data)
-    res.send(response.data)
-    const nonprofit = response.data;
-    db.nonprofit.create({
-      name: nonprofit.name,                 
-      profileUrl: nonprofit.profileUrl,           
-      description: nonprofit.description,          
-      ein: nonprofit.ein,                  
-      logoCloudinaryId: nonprofit.logoCloudinaryId,   
-      logoUrl: nonprofit.logoUrl,             
-      matchedTerms: nonprofit.matchedTerms 
-    })
-})
-.catch(error => {
-  console.log('error', error) 
-  res.json({ message: "Error ocurred, please try again" });
-})
+ res.send({message: "we are on the home page"})
 });
 
+app.use("/nonprofit", require('./controllers/nonprofit'))
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
 
