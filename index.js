@@ -1,18 +1,26 @@
-require('dotenv').config();
+// Imports
+require('dotenv').config()
 const express = require('express');
-const app = express();
-const axios = require('axios')
-const mongoose = require('mongoose');
 const cors = require('cors');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const apiKey = process.env.API_KEY;
+const axios = require('axios');
+require('./config/passport')(passport);
 
-//import models
-const Place = require('./models/place')
+// App Set up
+const app = express();
+const PORT = process.env.PORT || 8000;
 
+// Middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // JSON parsing
+app.use(cors()); // allow all CORS requests
+app.use(passport.initialize());
 
-//connect to database
-//connect to the database
+// Database Set Up
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
-mongoose.connect(MONGO_CONNECTION_STRING, { useNewUrlParser: true });
+mongoose.connect(MONGO_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
@@ -23,22 +31,16 @@ db.on('error', (error) => {
     console.log(`Database Error: ${error}`);
 })
 
-
-
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-
+// API Routes
 app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to Generous' });
+ res.send({message: "Welcome to Generous"})
 });
 
+app.use('/nonprofits', require('./controllers/nonprofit'))
+app.use('/examples', require('./controllers/example'));
+app.use('/users', require('./controllers/user'));
 
-//============== Places ==========================
-app.use('/places', require('./controllers/place'))
-//================================================
+// Server
+const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
 
-
-
-app.listen(8000, () => {
-    console.log('Running port 8000')
-});
+module.exports = server;
