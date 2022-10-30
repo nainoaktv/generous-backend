@@ -36,20 +36,38 @@ const apiKey = process.env.API_KEY;
         })
     })
  
-
-
- //Post nonprofits (Allow user to add to db)
- router.post('/nonprofits', (req, res) => {
-    axios.get(`https://partners.every.org/v0.2/browse/${req.params.concern}?apiKey=${apiKey}`)
-    .then(response => {
-        Nonprofit.insert({
+ //Post - create a nonprofit
+ router.post('/', (req, res) => {
+        Nonprofit.insertMany({
             name: req.body.name,
             profileUrl: req.body.profileUrl,
             description: req.body.description, 
-            ein: req.body.ein,
-            logoCloudinaryId: req.body.logoCloudinaryId,
-            logoUrl: req.body.logoUrl,
             matchedTerms: req.body.matchedTerms,
+        }) 
+        .then(create => {
+            res.redirect('/nonprofits')
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    })
+
+ //Post nonprofits that already exist
+ router.post('/', (req, res) => {
+    axios.get(`https://partners.every.org/v0.2/browse/${req.body.name}?apiKey=${apiKey}`)
+    .then(response => {
+        function getNonprof(item) {
+            return [item.name, item.profileUrl, item.description, item.ein, item.logoCloudinaryId, item.logoUrl, item.tags,];
+          }
+        response.data.nonprofits.map(getNonprof())
+        Nonprofit.insertMany({
+            name: req.body.name,
+            profileUrl: response.data.nonprofits.profileUrl,
+            description: response.data.nonprofits.description, 
+            ein: response.data.nonprofits.ein,
+            logoCloudinaryId: response.data.nonprofits.logoCloudinaryId,
+            logoUrl: response.data.nonprofits.logoUrl,
+            tags: response.data.nonprofits.tags,
         }) 
         .then(create => {
             res.redirect('/nonprofits')
@@ -62,6 +80,8 @@ const apiKey = process.env.API_KEY;
         console.log(error)
     })
 });
+
+
 
 
 
