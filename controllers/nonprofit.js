@@ -52,34 +52,46 @@ const apiKey = process.env.API_KEY;
         })
     })
 
- //Post nonprofits that already exist
- router.post('/', (req, res) => {
-    axios.get(`https://partners.every.org/v0.2/browse/${req.body.name}?apiKey=${apiKey}`)
-    .then(response => {
-        function getNonprof(item) {
-            return [item.name, item.profileUrl, item.description, item.ein, item.logoCloudinaryId, item.logoUrl, item.tags,];
-          }
-        response.data.nonprofits.map(getNonprof())
-        Nonprofit.insertMany({
-            name: req.body.name,
-            profileUrl: response.data.nonprofits.profileUrl,
-            description: response.data.nonprofits.description, 
-            ein: response.data.nonprofits.ein,
-            logoCloudinaryId: response.data.nonprofits.logoCloudinaryId,
-            logoUrl: response.data.nonprofits.logoUrl,
-            tags: response.data.nonprofits.tags,
-        }) 
-        .then(create => {
-            res.redirect('/nonprofits')
-        })
-        .catch(error => {
-            console.log(error)
-        })
+ //Post nonprofits that already exist, and then allow them to be posted
+ router.get('/:concern', (req, res) => {
+    axios.get(`https://partners.every.org/v0.2/browse/${req.params.concern}?apiKey=${apiKey}`)
+     .then(response => {
+        console.log(response.data)
+        res.json({ response: response.data });
     })
     .catch(error => {
-        console.log(error)
+        console.log(error);
     })
-});
+})
+
+
+//  router.post('/', (req, res) => {
+//     axios.get(`https://partners.every.org/v0.2/browse/${req.body.name}?apiKey=${apiKey}`)
+//     .then(response => {
+//         function getNonprof(item) {
+//             return [item.name, item.profileUrl, item.description, item.ein, item.logoCloudinaryId, item.logoUrl, item.tags,];
+//           }
+//         response.data.nonprofits.map(getNonprof())
+//         Nonprofit.insertMany({
+//             name: req.body.name,
+//             profileUrl: response.data.nonprofits.profileUrl,
+//             description: response.data.nonprofits.description, 
+//             ein: response.data.nonprofits.ein,
+//             logoCloudinaryId: response.data.nonprofits.logoCloudinaryId,
+//             logoUrl: response.data.nonprofits.logoUrl,
+//             tags: response.data.nonprofits.tags,
+//         }) 
+//         .then(create => {
+//             res.redirect('/nonprofits')
+//         })
+//         .catch(error => {
+//             console.log(error)
+//         })
+//     })
+//     .catch(error => {
+//         console.log(error)
+//     })
+// });
 
 
 
