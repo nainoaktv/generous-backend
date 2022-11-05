@@ -141,11 +141,16 @@ router.delete('/:id', (req, res) => {
 
 //GET a post's reviews
 router.get('/:id/reviews', (req, res) => {
-    Nonprofit.findById(req.params.id).populate('review').exec()       /////this route isnt working how it should fix it tommorrow
+    Nonprofit.findById(req.params.id).populate('reviews').exec()      
     .then(nonprofit => {
         console.log('This is the nonprofit', nonprofit);
+        res.json({ nonprofit:nonprofit });
     })
-})
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
 
 //POST Route - Create a review on a nonprofit
 router.post('/:id/reviews', (req, res) => {
