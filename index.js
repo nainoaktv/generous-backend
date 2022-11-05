@@ -41,6 +41,12 @@ app.use('/reviews', require('./controllers/review'));
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
 
+
+//GET Route for 404 page
+app.get('*', (req, res) => {
+    res.json({ message: 'ERROR! PAGE NOT FOUND' });
+  });
+
 // Server
 const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));
 
