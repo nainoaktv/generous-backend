@@ -36,7 +36,8 @@ app.get('/', (req, res) => {
  res.send({message: "Welcome to Generous"})
 });
 
-app.use('/nonprofits', require('./controllers/nonprofit'))
+app.use('/nonprofits', require('./controllers/nonprofit'));
+app.use('/reviews', require('./controllers/review'));
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
 

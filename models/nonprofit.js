@@ -8,7 +8,11 @@ const nonprofitSchema = new Schema({
     ein: String,                  //"911526803"
     logoCloudinaryId: String,     //"faja_profile/yx2bf7ajag59igzhv7uk"
     logoUrl: String,             //"https://res.cloudinary.com/everydotorg/image/upload/c_lfill,w_24,h_24,dpr_2/c_crop,ar_24:24/q_auto,f_auto,fl_progressive/faja_profile/yx2bf7ajag59igzhv7uk"
-    matchedTerms: Array          //["pet"]
+    matchedTerms: Array,          //["pet"]
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review'
+    }]
     
 });
 
