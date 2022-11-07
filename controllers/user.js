@@ -9,6 +9,7 @@ const { JWT_SECRET } = process.env;
 
 // DB Models
 const User = require('../models/user');
+const Contact = require('../models/contact');
 
 // Controllers
 router.get('/test', (req, res) => {
@@ -117,6 +118,53 @@ router.get('/messages', passport.authenticate('jwt', { session: false }), async 
     const sameUser = await User.findById(id);
     res.json({ id, name, email, message: messageArray, sameUser });
 });
+
+
+
+// ================================  BELOW RELATED TO CONTACT (messages) ===========================
+
+//GET a users messages from contact page
+router.get('/:id/contact', (req, res) => {
+    User.findById(req.params.id).populate('contacts').exec()      
+    .then(user => {
+        console.log('This is the user', user);
+        res.json({ user:user });
+    })
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
+
+//POST Route - Create a message from contact page
+router.post('/:id/contact', (req, res) => {
+    User.findById(req.params.id)
+    .then(user => {
+        console.log('This is the user', user);
+        //create and post message inside of user
+        Contact.create({
+            name: req.body.name,
+            email: req.body.email,
+            subject: req.body.subject,
+            message: req.body.message,
+        })
+        .then(message => {
+            user.contacts.push(message);
+            //save with message
+            user.save();
+            res.redirect(`/contact`);
+        })
+        .catch(error => {
+            console.log('error', error);
+            res.json({ message: 'Error occurred, please try again '});
+        });
+    })
+    .catch(error => {
+        console.log('error', error);
+        res.json({ message: 'Error occurred, please try again '});
+    })
+})
+
 
 // Exports
 module.exports = router;
