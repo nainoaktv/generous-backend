@@ -22,6 +22,10 @@ const userSchema = new Schema({
     nonprofits: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Nonprofit'
+    }],
+    contacts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Contact'
     }]
 })
 

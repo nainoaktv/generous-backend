@@ -40,6 +40,7 @@ app.use('/nonprofits', require('./controllers/nonprofit'));
 app.use('/reviews', require('./controllers/review'));
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
+app.use('/contact', require('./controllers/contact'));
 
 
 //GET Route for 404 page
